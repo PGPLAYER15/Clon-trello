@@ -6,6 +6,10 @@ import {
     crearColumna,
     crearTarjeta,
     actualizarColumna,
+    editarTarjeta,
+    eliminarTarjeta,
+    editarColumna,
+    eliminarColumna,
 } from "../services/TableroService";
 
 export const useTablero = (boardId) => {
@@ -15,7 +19,6 @@ export const useTablero = (boardId) => {
     const [error, setError] = useState(null);
     
 
-    // Obtener el tablero y las columnas al cargar el componente
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -25,8 +28,6 @@ export const useTablero = (boardId) => {
                 setColumnas(columnasData);
             } catch (error) {
                 setError("Error al cargar los datos del tablero.");
-                console.log("MMM")
-
                 console.error(error);
             } finally {
                 setLoading(false);
@@ -34,8 +35,7 @@ export const useTablero = (boardId) => {
         };
         fetchData();
     }, [boardId]);
-
-    // Agregar una nueva columna
+        
     const agregarColumna = async (titulo) => {
         try {
             const nuevaColumna = await crearColumna(boardId, titulo);
@@ -46,7 +46,6 @@ export const useTablero = (boardId) => {
         }
     };
 
-    // Agregar una nueva tarjeta a una columna
     const agregarTarjeta = async (columnaId, tituloTarjeta) => {
         try {
             const nuevaTarjeta = await crearTarjeta(boardId, columnaId, tituloTarjeta);
@@ -63,7 +62,76 @@ export const useTablero = (boardId) => {
         }
     };
 
-    // Actualizar el orden de las tarjetas en una columna
+    const editarTarjetaHandler = async (columnaId, cardId, nuevoTitulo, nuevaDescripcion) => {
+        try {
+            await editarTarjeta(boardId, columnaId, cardId, nuevoTitulo, nuevaDescripcion);
+            setColumnas((prev) =>
+                prev.map((columna) =>
+                    columna.id === columnaId
+                        ? {
+                            ...columna,
+                            cards: columna.cards.map((card) =>
+                                card.id === cardId 
+                                    ? { ...card, title: nuevoTitulo, description: nuevaDescripcion } 
+                                    : card
+                            ),
+                        }
+                        : columna
+                )
+            );
+        } catch (error) {
+            setError("Error al editar la tarjeta.");
+            console.error(error);
+            throw error;
+        }
+    };
+
+    const eliminarTarjetaHandler = async (columnaId, cardId) => {
+        try {
+            await eliminarTarjeta(boardId, columnaId, cardId);
+            setColumnas((prev) =>
+                prev.map((columna) =>
+                    columna.id === columnaId
+                        ? {
+                            ...columna,
+                            cards: columna.cards.filter((card) => card.id !== cardId),
+                        }
+                        : columna
+                )
+            );
+        } catch (error) {
+            setError("Error al eliminar la tarjeta.");
+            console.error(error);
+            throw error;
+        }
+    };
+
+    const editarColumnaHandler = async (columnaId, nuevoTitulo) => {
+        try {
+            await editarColumna(boardId, columnaId, nuevoTitulo);
+            setColumnas((prev) =>
+                prev.map((columna) =>
+                    columna.id === columnaId ? { ...columna, title: nuevoTitulo } : columna
+                )
+            );
+        } catch (error) {
+            setError("Error al editar la columna.");
+            console.error(error);
+            throw error;
+        }
+    };
+
+    const eliminarColumnaHandler = async (columnaId) => {
+        try {
+            await eliminarColumna(boardId, columnaId);
+            setColumnas((prev) => prev.filter((columna) => columna.id !== columnaId));
+        } catch (error) {
+            setError("Error al eliminar la columna.");
+            console.error(error);
+            throw error;
+        }
+    };
+
     const actualizarOrdenTarjetas = async (columnaId, tarjetas) => {
         try {
             await actualizarColumna(boardId, columnaId, tarjetas);
@@ -73,22 +141,34 @@ export const useTablero = (boardId) => {
         }
     };
 
-    // Función para mover una tarjeta entre columnas
     const moverTarjeta = (sourceColumnId, targetColumnId, activeCard) => {
         setColumnas((prev) => {
-            const newColumns = [...prev];
-            const sourceColumn = newColumns.find((c) => c.id === sourceColumnId);
-            const targetColumn = newColumns.find((c) => c.id === targetColumnId);
+            const sourceColumn = prev.find((c) => c.id === sourceColumnId);
+            const targetColumn = prev.find((c) => c.id === targetColumnId);
 
-            if (!sourceColumn || !targetColumn) return prev;
+            if (!sourceColumn || !targetColumn || !activeCard) return prev;
 
-            const cardIndex = sourceColumn.cards.findIndex((c) => c.id === activeCard.id);
-            const [movedCard] = sourceColumn.cards.splice(cardIndex, 1);
-            targetColumn.cards.push(movedCard);
+            const cardToMove = sourceColumn.cards.find((c) => c?.id === activeCard.id);
+            if (!cardToMove) return prev;
 
-            return newColumns;
+            return prev.map((col) => {
+                if (col.id === sourceColumnId) {
+                    return {
+                        ...col,
+                        cards: col.cards.filter((c) => c?.id !== activeCard.id)
+                    };
+                }
+                if (col.id === targetColumnId) {
+                    return {
+                        ...col,
+                        cards: [...col.cards, cardToMove]
+                    };
+                }
+                return col;
+            });
         });
     };
+
 
     return {
         tablero,
@@ -97,6 +177,10 @@ export const useTablero = (boardId) => {
         error,
         agregarColumna,
         agregarTarjeta,
+        editarTarjeta: editarTarjetaHandler,
+        eliminarTarjeta: eliminarTarjetaHandler,
+        editarColumna: editarColumnaHandler,
+        eliminarColumna: eliminarColumnaHandler,
         actualizarOrdenTarjetas,
         moverTarjeta,
     };
