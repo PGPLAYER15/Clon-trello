@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { crearTablero } from "../services/BoardService";
 
-export const useBoardCabecera = () => {
+export const useBoardCabecera = (onSuccess) => {
     const [nombre, setNombre] = useState("");
     const [descripcion, setDescripcion] = useState("");
     const [color, setColor] = useState("#ffffff");
@@ -20,6 +20,9 @@ export const useBoardCabecera = () => {
         try {
             const nuevoTablero = await crearTablero(nombre, descripcion, color);
             console.log("Tablero creado:", nuevoTablero);
+            if (onSuccess) {
+                onSuccess(nuevoTablero);
+            }
         } catch (error) {
             setError("Error al crear el tablero. Por favor, inténtalo de nuevo.");
             console.error(error);
