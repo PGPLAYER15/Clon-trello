@@ -1,10 +1,22 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8000/api";
+const API_BASE_URL = "/api";
+
+const api = axios.create({
+    baseURL: API_BASE_URL
+});
+
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
 
 export const crearTablero = async (nombre, descripcion, color) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}/boards`, {
+        const response = await api.post(`/boards/`, {
             title: nombre,
             description: descripcion,
             color: color,
