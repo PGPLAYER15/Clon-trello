@@ -1,32 +1,253 @@
-.contenedor{
+.contenedor {
     display: flex;
     width: 100%;
-    height: 50px;
-    background: #383434;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    flex-direction: row;
+    min-height: 36px;
+    background: var(--bg-card);
+    margin-bottom: 8px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    align-items: center;
+    padding: 8px 8px 8px 0;
+    cursor: default;
+    transition: background-color var(--transition-fast), box-shadow var(--transition-normal), transform var(--transition-normal);
+}
+
+.dragHandle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    padding: 4px 2px;
+    color: var(--text-muted);
+    cursor: grab;
+    font-size: 10px;
+    letter-spacing: -2px;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.dragHandle:active {
+    cursor: grabbing;
+}
+
+.contenedor:hover .dragHandle {
+    opacity: 1;
+}
+
+
+.contenedor:hover {
+    background-color: #f4f5f7;
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-1px);
+}
+
+.contenedor:active {
+    transform: translateY(0);
+}
+
+.titulo {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--text-primary);
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0 8px;
+    word-break: break-word;
+}
+
+.checkbox {
+    width: 16px;
+    height: 16px;
+    margin: 0 4px;
+    accent-color: var(--trello-green);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: transform var(--transition-fast);
+}
+
+.checkbox:hover {
+    transform: scale(1.1);
+}
+
+.checkbox:checked {
+    transform: scale(1.05);
+}
+
+.actions {
+    display: flex;
+    gap: 2px;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.contenedor:hover .actions {
+    opacity: 1;
+}
+
+.actionBtn {
+    width: 24px;
+    height: 24px;
+    padding: 4px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--transition-fast);
+}
+
+.actionBtn:hover {
+    background-color: rgba(9, 30, 66, 0.08);
+}
+
+.labels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 4px;
+}
+
+.label {
+    height: 8px;
+    min-width: 40px;
+    border-radius: 4px;
+}
+
+.modalContent {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.modalContent label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.editInput {
+    padding: 10px 12px;
+    border: 2px solid var(--bg-secondary);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    transition: border-color var(--transition-fast);
+}
+
+.editInput:focus {
+    outline: none;
+    border-color: var(--trello-blue);
+}
+
+.descriptionInput {
+    padding: 10px 12px;
+    border: 2px solid var(--bg-secondary);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 100px;
+    transition: border-color var(--transition-fast);
+}
+
+.descriptionInput:focus {
+    outline: none;
+    border-color: var(--trello-blue);
+}
+
+.descriptionInput::placeholder {
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.modalActions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
     align-items: center;
 }
 
-.titulo{
-    font-size: 1rem;
-    font-weight: bold;
-    height: 24px;
-    margin: 10px;
+.saveBtn {
+    background: var(--trello-blue);
+    color: var(--text-light);
+    border: none;
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.saveBtn:hover {
+    background: var(--trello-blue-hover);
+}
+
+.saveBtn:disabled {
+    background: var(--text-muted);
+    cursor: not-allowed;
+}
+
+.deleteBtn {
+    background: transparent;
+    color: #b04632;
+    border: 1px solid #b04632;
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.deleteBtn:hover {
+    background: #b04632;
     color: white;
-    background: none;
 }
 
-.checkbox{
-    accent-color: #57c55b;
-    margin: 10px;
-    transition: all 0.5s ease;
-    border: 2px solid #333;
-    border-radius: 10px;
-    outline: none;
+.deleteConfirm {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
-.checkbox:checked{
-    transform: scale(1.2);
+.deleteConfirm span {
+    color: #b04632;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.confirmDeleteBtn {
+    background: #b04632;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.confirmDeleteBtn:hover {
+    background: #933b27;
+}
+
+.cancelBtn {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--bg-secondary);
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.cancelBtn:hover {
+    background: var(--bg-secondary);
 }
