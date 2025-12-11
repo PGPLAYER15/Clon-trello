@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from app.models.database import Base
 from sqlalchemy.orm import Session, joinedload
@@ -8,6 +8,19 @@ from .list import List
 def get_boards(db: Session, skip: int = 0, limit: int = 100):
     return (
         db.query(Board)
+        .options(
+            joinedload(Board.lists)
+            .joinedload(List.cards)
+        )
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+
+def get_boards_by_user(db: Session, user_id: int, skip: int = 0, limit: int = 100):
+    return (
+        db.query(Board)
+        .filter(Board.user_id == user_id)
         .options(
             joinedload(Board.lists)
             .joinedload(List.cards)
@@ -28,8 +41,11 @@ def get_board(db: Session, board_id: int):
         .first()
     )
 
-def create_board(db: Session, board: BoardCreate):
-    db_board = Board(**board.dict())
+def create_board(db: Session, board: BoardCreate, user_id: int = None):
+    board_data = board.dict()
+    if user_id:
+        board_data['user_id'] = user_id
+    db_board = Board(**board_data)
     db.add(db_board)
     db.commit()
     db.refresh(db_board)
@@ -50,8 +66,10 @@ class Board(Base):
     title = Column(String(100), nullable=False)
     description = Column(String(500), nullable=True)
     color = Column(String(7), nullable=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
 
-    # Relación con Listas (incluyendo cascade delete)
+    owner = relationship("User", back_populates="boards")
+
     lists = relationship(
         "List", 
         back_populates="board",

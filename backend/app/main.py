@@ -1,16 +1,17 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.models.database import engine, Base, SessionLocal
-from app.routes import boards, lists, cards  
+from app.routes import boards, lists, cards, auth
 from app.models.board import Board
 from app.models.list import List
 from app.models.card import Card
+from app.models.user import User
 
-app = FastAPI()
+app = FastAPI(title="Trello Clone API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["http://localhost:5173", "http://localhost:5174"],
     allow_credentials=True,
     allow_methods=["*"], 
     allow_headers=["*"], 
@@ -51,6 +52,13 @@ def startup_event():
     finally:
         db.close()
 
+# Auth routes
+app.include_router(
+    auth.router,
+    prefix="/api/auth"
+)
+
+# Board routes
 app.include_router(
     boards.router, 
     prefix="/api/boards"
