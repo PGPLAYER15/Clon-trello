@@ -1,0 +1,118 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0079bf 0%, #0067a3 50%, #026aa7 100%);
+    padding: 20px;
+}
+
+.card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-dropdown);
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.logo h1 {
+    font-size: 24px;
+    color: var(--trello-blue);
+    margin: 0;
+}
+
+.card h2 {
+    text-align: center;
+    color: var(--text-primary);
+    margin: 0 0 24px 0;
+    font-size: 20px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.inputGroup label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.inputGroup input {
+    padding: 12px;
+    border: 2px solid var(--bg-secondary);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    transition: border-color var(--transition-fast);
+}
+
+.inputGroup input:focus {
+    outline: none;
+    border-color: var(--trello-blue);
+}
+
+.error {
+    color: #b04632;
+    font-size: 14px;
+    margin: 0;
+    text-align: center;
+}
+
+.submitBtn {
+    background: var(--trello-blue);
+    color: var(--text-light);
+    border: none;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+    margin-top: 8px;
+}
+
+.submitBtn:hover {
+    background: var(--trello-blue-hover);
+}
+
+.submitBtn:disabled {
+    background: var(--text-muted);
+    cursor: not-allowed;
+}
+
+.loginLink {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.loginLink a {
+    color: var(--trello-blue);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.loginLink a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+    .card {
+        padding: 24px;
+    }
+}
