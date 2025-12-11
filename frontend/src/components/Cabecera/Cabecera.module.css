@@ -5,54 +5,52 @@
     z-index: 1000;
     display: flex;
     align-items: center;
-    background-color: #111111;
-    padding: 0 2rem;
-    height: 4.8vh;
+    background: var(--bg-header);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 0 8px;
+    height: 48px;
     width: 100%;
-    gap: 1rem;
+    gap: 8px;
     justify-content: center;
 }
 
 .cabecera__left_group {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-    margin-left: 2rem; 
+    gap: 4px;
 }
 
 .btn_espacio,
 .btn_menu_arriba {
-    padding: 0.6rem 1.2rem;
-    border-radius: 5px;
-    font-size: 0.85rem;
-    transition: all 0.2s ease;
-    min-width: 140px;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color var(--transition-fast);
     text-align: center;
     outline: none;
+    border: none;
+    cursor: pointer;
 }
 
 .btn_espacio {
-    background-color: #4d4848;
-    border: 1px solid #666;
-    color: white;
-    outline: none;
+    background-color: rgba(255, 255, 255, 0.24);
+    color: var(--text-light);
 }
 
 .btn_menu_arriba {
-    background-color: #D9D9D9;
-    border: 1px solid #D9D9D9;
-    color: #000;
-    outline: none;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: var(--text-primary);
+    font-weight: 600;
 }
 
 .btn_espacio:hover {
-    background-color: #5F5A5A;
-    transform: translateY(-1px);
+    background-color: rgba(255, 255, 255, 0.32);
 }
 
 .btn_menu_arriba:hover {
-    background-color: #e2dfdf;
-    border-color: #e2dfdf;
+    background-color: var(--bg-card);
 }
 
 .btn_espacio:focus,
@@ -61,63 +59,155 @@
 .btn_menu_arriba:focus,
 .btn_menu_arriba:active,
 .btn_menu_arriba:focus-visible {
-    outline: none;
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 1px;
 }
 
 .contenedor {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin-right: 2rem;
+    gap: 8px;
 }
 
 .contenedor_botones {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 4px;
 }
 
-.form_group{
+.form_group {
     display: flex;
-    gap: 1rem;
+    gap: 12px;
     flex-direction: column;
     justify-content: center;
 }
 
+.form_group label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: -8px;
+}
+
+.form_group input {
+    padding: 10px 12px;
+    border: 2px solid var(--bg-secondary);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    transition: border-color var(--transition-fast);
+}
+
+.form_group input:focus {
+    outline: none;
+    border-color: var(--trello-blue);
+}
+
+.form_group button[type="submit"] {
+    background: var(--trello-blue);
+    color: var(--text-light);
+    border: none;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background-color var(--transition-fast);
+}
+
+.form_group button[type="submit"]:hover {
+    background: var(--trello-blue-hover);
+}
+
+.form_group button[type="submit"]:disabled {
+    background: var(--text-muted);
+    cursor: not-allowed;
+}
+
+.colorPalette {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.colorBtn {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    min-height: 32px;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    position: relative;
+}
+
+.colorBtn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.colorBtnSelected {
+    box-shadow: 0 0 0 3px var(--text-light), 0 0 0 5px var(--text-primary);
+}
+
+.colorBtnSelected::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Logo/Brand area styling */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-light);
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.5px;
+}
+
 @media (max-width: 1024px) {
     .cabecera {
-        padding: 0 1rem;
+        padding: 0 8px;
     }
-    
+
     .cabecera__left_group {
-        gap: 1rem;
-        margin-left: 1rem;
+        gap: 4px;
     }
-    
+
     .btn_espacio,
     .btn_menu_arriba {
-        min-width: 120px;
-        padding: 0.5rem 1rem;
+        padding: 6px 10px;
+        font-size: 13px;
     }
 }
+
 @media (max-width: 768px) {
     .cabecera {
         height: auto;
-        padding: 0.5rem 1rem;
+        min-height: 44px;
+        padding: 6px 8px;
         flex-wrap: wrap;
-        gap: 1rem;
+        gap: 6px;
     }
-    
+
     .cabecera__left_group,
     .contenedor_tempo {
-        margin: 0;
         width: 100%;
         justify-content: center;
     }
-    
+
     .btn_espacio,
     .btn_menu_arriba {
-        min-width: auto;
-        width: 48%;
+        flex: 1;
+        max-width: 150px;
     }
 }

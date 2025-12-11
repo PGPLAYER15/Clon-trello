@@ -1,37 +1,30 @@
 :root {
-    --color-fondo: #6b6b6b;
     --ancho-fondo: 100vw;
     --alto-fondo: 100vh;
-    --padding-top: 6.8vh;
+    --padding-top: 48px;
     --margin-left: 50px;
 }
 
-body, html {
+body,
+html {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
-    overflow-y: hidden;
+    overflow-y: auto;
 }
 
 .fondo {
-    background-color: #111111;
-    background-image: 
-        radial-gradient(at 47% 33%, hsl(211.48, 72%, 16%) 0, transparent 59%), 
-        radial-gradient(at 82% 65%, hsl(217.45, 98%, 19%) 0, transparent 55%);
-    width: var(--ancho-fondo);
-    min-height: var(--alto-fondo);
+    background: linear-gradient(135deg, #0079bf 0%, #0067a3 50%, #026aa7 100%);
+    width: 100vw;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    padding-top: var(--padding-top);
-    margin-left: var(--margin-left);
     position: relative;
     box-sizing: border-box;
-    transition: all 0.3s ease;
     overflow-x: hidden;
 }
 
-/* Media Queries para diferentes tamaños de pantalla */
 @media (max-width: 1200px) {
     :root {
         --margin-left: 40px;
@@ -40,50 +33,34 @@ body, html {
 
 @media (max-width: 1024px) {
     :root {
-        --padding-top: 6vh;
-        --margin-left: 35px;
-    }
-    
-    body, html {
-        overflow-y: auto; /* Permite scroll vertical en tablets */
+        --margin-left: 40px;
     }
 }
 
 @media (max-width: 768px) {
     :root {
-        --padding-top: 5.5vh;
-        --margin-left: 30px;
+        --margin-left: 40px;
     }
-    
+
     .fondo {
-        padding-top: calc(var(--padding-top) + 10px); /* Espacio adicional */
+        padding-top: calc(var(--padding-top) + 8px);
     }
 }
 
 @media (max-width: 480px) {
     :root {
-        --padding-top: 5vh;
+        --padding-top: 48px;
         --margin-left: 0;
     }
-    
-    body, html {
-        overflow-y: auto; /* Siempre permite scroll en móviles */
-    }
-    
+
     .fondo {
         margin-left: 0;
-        padding-top: calc(var(--padding-top) + 15px); /* Más espacio para cabecera móvil */
-        padding-bottom: 60px; /* Espacio para menú inferior en móviles */
+        padding-bottom: 64px;
     }
 }
 
 @media (max-width: 375px) {
-    :root {
-        --padding-top: 4.5vh;
-    }
-    
     .fondo {
-        padding-top: calc(var(--padding-top) + 20px);
+        padding-top: calc(var(--padding-top) + 8px);
     }
 }
-
