@@ -1,14 +1,23 @@
 // services/tableroService.js
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8000/api";
+const API_BASE_URL = "/api";
 
+const api = axios.create({
+    baseURL: API_BASE_URL
+});
 
-//Crear un tablero
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
 
 export const crearTablero = async (nombre, descripcion, color) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}/boards`, {
+        const response = await api.post(`/boards`, {
             title: nombre,
             description: descripcion,
             color: color,
@@ -20,22 +29,19 @@ export const crearTablero = async (nombre, descripcion, color) => {
     }
 };
 
-// Obtener todos los tableros
-
-export const fetchTableros = async () =>{
-    try{
-        const response = await axios.get(`${API_BASE_URL}/boards/`);
+export const fetchTableros = async () => {
+    try {
+        const response = await api.get(`/boards/`);
         return response.data;
-    }catch(error){
+    } catch (error) {
         console.error("Error al obtener los tableros:", error);
         throw error;
     }
 }
 
-// Obtener un tablero por ID
 export const fetchTablerobyID = async (id) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/boards/${id}`);
+        const response = await api.get(`/boards/${id}`);
         return response.data;
     } catch (error) {
         console.error("Error al obtener el tablero:", error);
@@ -43,10 +49,9 @@ export const fetchTablerobyID = async (id) => {
     }
 };
 
-// Obtener las columnas de un tablero
 export const fetchColumnas = async (boardId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/boards/${boardId}/lists`);
+        const response = await api.get(`/boards/${boardId}/lists`);
         return response.data;
     } catch (error) {
         console.error("Error al obtener las columnas:", error);
@@ -54,10 +59,9 @@ export const fetchColumnas = async (boardId) => {
     }
 };
 
-// Crear una nueva columna
 export const crearColumna = async (boardId, titulo) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}/boards/${boardId}/lists`, {
+        const response = await api.post(`/boards/${boardId}/lists`, {
             title: titulo,
             board_id: boardId,
         });
@@ -68,11 +72,10 @@ export const crearColumna = async (boardId, titulo) => {
     }
 };
 
-// Crear una nueva tarjeta en una columna
 export const crearTarjeta = async (boardId, columnaId, tituloTarjeta) => {
     try {
-        const response = await axios.post(
-            `${API_BASE_URL}/boards/${boardId}/lists/${columnaId}/cards/create`,
+        const response = await api.post(
+            `/boards/${boardId}/lists/${columnaId}/cards/create`,
             {
                 title: tituloTarjeta,
                 description: null,
@@ -87,14 +90,57 @@ export const crearTarjeta = async (boardId, columnaId, tituloTarjeta) => {
     }
 };
 
-// Actualizar el orden de las tarjetas en una columna
 export const actualizarColumna = async (boardId, columnaId, tarjetas) => {
     try {
-        await axios.put(`${API_BASE_URL}/boards/${boardId}/lists/${columnaId}/cards`, {
+        await api.put(`/boards/${boardId}/lists/${columnaId}/cards`, {
             cards: tarjetas.map((tarjeta) => tarjeta.id),
         });
     } catch (error) {
         console.error("Error al actualizar la columna:", error);
+        throw error;
+    }
+};
+
+export const editarTarjeta = async (boardId, columnaId, cardId, nuevoTitulo, nuevaDescripcion) => {
+    try {
+        const response = await api.put(
+            `/boards/${boardId}/lists/${columnaId}/cards/${cardId}`,
+            { title: nuevoTitulo, description: nuevaDescripcion }
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Error al editar la tarjeta:", error);
+        throw error;
+    }
+};
+
+export const eliminarTarjeta = async (boardId, columnaId, cardId) => {
+    try {
+        await api.delete(`/boards/${boardId}/lists/${columnaId}/cards/${cardId}`);
+    } catch (error) {
+        console.error("Error al eliminar la tarjeta:", error);
+        throw error;
+    }
+};
+
+export const editarColumna = async (boardId, columnaId, nuevoTitulo) => {
+    try {
+        const response = await api.put(
+            `/boards/${boardId}/lists/${columnaId}`,
+            { title: nuevoTitulo, board_id: boardId }
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Error al editar la columna:", error);
+        throw error;
+    }
+};
+
+export const eliminarColumna = async (boardId, columnaId) => {
+    try {
+        await api.delete(`/boards/${boardId}/lists/${columnaId}`);
+    } catch (error) {
+        console.error("Error al eliminar la columna:", error);
         throw error;
     }
 };
