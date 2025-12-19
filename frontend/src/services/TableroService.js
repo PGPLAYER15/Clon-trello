@@ -101,11 +101,24 @@ export const actualizarColumna = async (boardId, columnaId, tarjetas) => {
     }
 };
 
-export const editarTarjeta = async (boardId, columnaId, cardId, nuevoTitulo, nuevaDescripcion) => {
+export const moverTarjetaService = async (boardId, sourceColumnaId, targetColumnaId, cardId) => {
+    try {
+        const response = await api.put(
+            `/boards/${boardId}/lists/${sourceColumnaId}/cards/${cardId}`,
+            { list_id: targetColumnaId }
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Error al mover la tarjeta:", error);
+        throw error;
+    }
+};
+
+export const editarTarjeta = async (boardId, columnaId, cardId, nuevoTitulo, nuevaDescripcion,dueDate) => {
     try {
         const response = await api.put(
             `/boards/${boardId}/lists/${columnaId}/cards/${cardId}`,
-            { title: nuevoTitulo, description: nuevaDescripcion }
+            { title: nuevoTitulo, description: nuevaDescripcion, due_date: dueDate }
         );
         return response.data;
     } catch (error) {
