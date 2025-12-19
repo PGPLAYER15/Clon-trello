@@ -10,6 +10,7 @@ import {
     eliminarTarjeta,
     editarColumna,
     eliminarColumna,
+    moverTarjetaService,
 } from "../services/TableroService";
 
 export const useTablero = (boardId) => {
@@ -62,9 +63,9 @@ export const useTablero = (boardId) => {
         }
     };
 
-    const editarTarjetaHandler = async (columnaId, cardId, nuevoTitulo, nuevaDescripcion) => {
+    const editarTarjetaHandler = async (columnaId, cardId, nuevoTitulo, nuevaDescripcion,dueDate) => {
         try {
-            await editarTarjeta(boardId, columnaId, cardId, nuevoTitulo, nuevaDescripcion);
+            await editarTarjeta(boardId, columnaId, cardId, nuevoTitulo, nuevaDescripcion,dueDate);
             setColumnas((prev) =>
                 prev.map((columna) =>
                     columna.id === columnaId
@@ -72,7 +73,7 @@ export const useTablero = (boardId) => {
                             ...columna,
                             cards: columna.cards.map((card) =>
                                 card.id === cardId 
-                                    ? { ...card, title: nuevoTitulo, description: nuevaDescripcion } 
+                                    ? { ...card, title: nuevoTitulo, description: nuevaDescripcion,due_date:dueDate } 
                                     : card
                             ),
                         }
@@ -141,7 +142,8 @@ export const useTablero = (boardId) => {
         }
     };
 
-    const moverTarjeta = (sourceColumnId, targetColumnId, activeCard) => {
+    const moverTarjeta = async (sourceColumnId, targetColumnId, activeCard) => {
+        // Actualizar estado local primero (optimistic update)
         setColumnas((prev) => {
             const sourceColumn = prev.find((c) => c.id === sourceColumnId);
             const targetColumn = prev.find((c) => c.id === targetColumnId);
@@ -167,6 +169,15 @@ export const useTablero = (boardId) => {
                 return col;
             });
         });
+
+        // Persistir en backend
+        try {
+            await moverTarjetaService(boardId, sourceColumnId, targetColumnId, activeCard.id);
+        } catch (error) {
+            setError("Error al mover la tarjeta.");
+            console.error(error);
+            // Revertir cambio si falla (opcional: recargar datos)
+        }
     };
 
 
