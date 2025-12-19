@@ -1,13 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.models.database import engine, Base, SessionLocal
-from app.routes import boards, lists, cards, auth
-from app.models.board import Board
-from app.models.list import List
-from app.models.card import Card
-from app.models.user import User
+from app.infrastructure.database import engine, Base, SessionLocal
+from app.api.v1 import auth, boards, lists, cards
+from app.domain.entities.board import Board
+from app.domain.entities.list import List
+from app.domain.entities.card import Card
+from app.domain.entities.user import User
 
-app = FastAPI(title="Trello Clone API", version="1.0.0")
+app = FastAPI(title="Trello Clone API", version="2.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -55,18 +55,21 @@ def startup_event():
 # Auth routes
 app.include_router(
     auth.router,
-    prefix="/api/auth"
+    prefix="/api/auth",
+    tags=["auth"]
 )
 
 # Board routes
 app.include_router(
     boards.router, 
-    prefix="/api/boards"
+    prefix="/api/boards",
+    tags=["boards"]
 )
 
 app.include_router(
     lists.router, 
-    prefix="/api/boards/{board_id}/lists"
+    prefix="/api/boards/{board_id}/lists",
+    tags=["lists"]
 )
 
 app.include_router(
@@ -77,4 +80,4 @@ app.include_router(
 
 @app.get("/")
 def read_root():
-    return {"message": "API de Trello Clone"}
+    return {"message": "API de Trello Clone - Clean Architecture v2.0"}
