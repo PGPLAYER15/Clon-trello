@@ -55,8 +55,17 @@
     background: none;
     border: none;
     padding: 0;
-    margin: 0 8px;
+    margin: 0;
     word-break: break-word;
+}
+
+.cardContent {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    cursor: pointer;
+    margin: 0 8px;
+    gap: 4px;
 }
 
 .checkbox {
@@ -250,4 +259,84 @@
 
 .cancelBtn:hover {
     background: var(--bg-secondary);
+}
+
+/* Date Picker Styles */
+.datePickerContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.datePickerLabel {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+
+
+.dateInput {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid var(--bg-secondary);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-family: inherit;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.dateInput:hover {
+    border-color: var(--trello-blue);
+    background: white;
+}
+
+.dateInput:focus {
+    outline: none;
+    border-color: var(--trello-blue);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(0, 121, 191, 0.15);
+}
+
+/* Due Date Badge en la tarjeta */
+.dueDateBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 500;
+    margin-top: 4px;
+}
+
+
+
+/* Colores de urgencia */
+.dueGreen {
+    background: #61bd4f20;
+    color: #519839;
+}
+
+.dueYellow {
+    background: #f2d60020;
+    color: #c4a000;
+}
+
+.dueRed {
+    background: #eb5a4620;
+    color: #b04632;
+}
+
+.dueGray {
+    background: #5e6c8420;
+    color: #5e6c84;
+    text-decoration: line-through;
 }
