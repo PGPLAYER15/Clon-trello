@@ -130,6 +130,7 @@ function Columna({ board_id, id, titulo, cards, onAddCard, onDeleteCard, onEditC
                         board_id={board_id} 
                         columnaId={id} 
                         check={card.check}
+                        dueDate={card.due_date}
                         onDelete={onDeleteCard}
                         onEdit={onEditCard}
                     />

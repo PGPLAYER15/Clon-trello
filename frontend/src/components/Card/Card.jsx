@@ -1,16 +1,41 @@
 import { useDraggable } from '@dnd-kit/core';
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useCard } from "../../hooks/useCard";
 import Modal from "../modal/Modal"
 import { CSS } from '@dnd-kit/utilities';
 import styles from "../Card/Card.module.css";
 
-function Card({ board_id, id, title, description, columnaId, check, onDelete, onEdit }) {
+const getUrgencyClass = (dueDate, isCompleted) => {
+    if (!dueDate) return null;
+    if (isCompleted) return styles.dueGray;
+    
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const due = new Date(dueDate);
+    due.setHours(0, 0, 0, 0);
+    
+    const diffTime = due - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays < 0) return styles.dueRed;      
+    if (diffDays <= 1) return styles.dueRed;    
+    if (diffDays <= 3) return styles.dueYellow;  
+    return styles.dueGreen;                      
+};
+
+const formatDueDate = (dueDate) => {
+    if (!dueDate) return null;
+    const date = new Date(dueDate);
+    return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+};
+
+function Card({ board_id, id, title, description, columnaId, check, onDelete, onEdit,dueDate }) {
 
     const { isChecked, toggleCheck, isLoading, error } = useCard(check);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editedTitle, setEditedTitle] = useState(title);
     const [editedDescription, setEditedDescription] = useState(description || '');
+    const [editedDueDate, setEditedDueDate] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -20,6 +45,7 @@ function Card({ board_id, id, title, description, columnaId, check, onDelete, on
         setIsModalOpen(true);
         setEditedTitle(title);
         setEditedDescription(description || '');
+        setEditedDueDate(dueDate ? dueDate.split('T')[0] : '');
         setShowDeleteConfirm(false);
     };
     
@@ -44,7 +70,7 @@ function Card({ board_id, id, title, description, columnaId, check, onDelete, on
         }
         setIsEditing(true);
         try {
-            await onEdit(columnaId, id, editedTitle, editedDescription);
+            await onEdit(columnaId, id, editedTitle, editedDescription, editedDueDate || null);
             closeModal();
         } catch (error) {
             alert("Error al guardar cambios");
@@ -103,12 +129,16 @@ function Card({ board_id, id, title, description, columnaId, check, onDelete, on
                 disabled={isLoading}
             />
             
-            <p 
-                onClick={openModal}
-                className={styles.titulo}
-            >
-                {title}
-            </p>
+            <div className={styles.cardContent} onClick={openModal}>
+                <p className={styles.titulo}>
+                    {title}
+                </p>
+                {dueDate && (
+                    <span className={`${styles.dueDateBadge} ${getUrgencyClass(dueDate, isChecked)}`}>
+                        {formatDueDate(dueDate)}
+                    </span>
+                )}
+            </div>
 
             <Modal isOpen={isModalOpen} onClose={closeModal}>
                 <h2>Editar Tarjeta</h2>
@@ -122,6 +152,16 @@ function Card({ board_id, id, title, description, columnaId, check, onDelete, on
                         className={styles.editInput}
                         placeholder="Título de la tarjeta"
                     />
+                    
+                    <div className={styles.datePickerContainer}>
+                        <label className={styles.datePickerLabel}>Fecha de vencimiento</label>
+                        <input
+                            type="date"
+                            value={editedDueDate}
+                            onChange={(e) => setEditedDueDate(e.target.value)}
+                            className={styles.dateInput}
+                        />
+                    </div>  
                     
                     <label>Descripción:</label>
                     <textarea
