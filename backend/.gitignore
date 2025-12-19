@@ -1,0 +1,6 @@
+CLEAN_ARCHITECTURE.md
+venv/
+__pycache__/
+*.pyc
+trello.db
+.env
