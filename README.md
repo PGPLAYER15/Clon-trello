@@ -82,15 +82,15 @@ La aplicación estará disponible en:
 ## 🖼️ Demo
 
 <div align="center">
-  <img src="https://drive.google.com/uc?export=view&id=1Xeq2xOE_q1JpyrJyo1G_KH8hTV0eWKLV" alt="Vista de tableros" width="600"/>
+  <img src="Login.png" alt="Vista de tableros" width="600"/>
 </div>
 <br/>
 <div align="center">
-  <img src="https://drive.google.com/uc?export=view&id=1QEomySE5Ggf36SoSY030lAGyzBKzLqFY" alt="Tablero con columnas" width="600"/>
+  <img src="Tableros.png" alt="Tablero con columnas" width="600"/>
 </div>
 <br/>
 <div align="center">
-  <img src="https://drive.google.com/uc?export=view&id=1f-vm0omBTYjV4bD4INdzks_DG1ax84os" alt="Drag and drop" width="600"/>
+  <img src="Cards.png" alt="Cards" width="600"/>
 </div>
 
 ## 📂 Estructura del proyecto

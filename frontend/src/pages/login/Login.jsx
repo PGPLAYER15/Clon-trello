@@ -31,7 +31,7 @@ function Login() {
         <div className={styles.container}>
             <div className={styles.card}>
                 <div className={styles.logo}>
-                    <h1>📋 Trello Clone</h1>
+                    <h1>Trello Clone</h1>
                 </div>
                 
                 <h2>Iniciar Sesión</h2>
