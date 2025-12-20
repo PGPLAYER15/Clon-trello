@@ -82,15 +82,15 @@ La aplicación estará disponible en:
 ## 🖼️ Demo
 
 <div align="center">
-  <img src="Login.png" alt="Vista de tableros" width="600"/>
+  <img src="img/Login.png" alt="Vista de tableros" width="600"/>
 </div>
 <br/>
 <div align="center">
-  <img src="Tableros.png" alt="Tablero con columnas" width="600"/>
+  <img src="img/Tableros.png" alt="Tablero con columnas" width="600"/>
 </div>
 <br/>
 <div align="center">
-  <img src="Cards.png" alt="Cards" width="600"/>
+  <img src="img/Cards.png" alt="Cards" width="600"/>
 </div>
 
 ## 📂 Estructura del proyecto
