@@ -3,7 +3,7 @@ import { useTableros } from "../../hooks/useTableros.js";
 import Cabecera from "../../components/Cabecera/Cabecera.jsx";
 import Fondo from "../../components/Fondo/Fondo.jsx";
 import Menu from "../../components/Menu/Menu.jsx";
-import styles from "./Home.module.css";
+import styles from "./home.module.css";
 
 function Home() {
     const navigate = useNavigate();
