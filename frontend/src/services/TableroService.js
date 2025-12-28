@@ -1,7 +1,7 @@
 // services/tableroService.js
 import axios from "axios";
 
-const API_BASE_URL = "/api";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
 
 const api = axios.create({
     baseURL: API_BASE_URL
@@ -17,7 +17,7 @@ api.interceptors.request.use((config) => {
 
 export const crearTablero = async (nombre, descripcion, color) => {
     try {
-        const response = await api.post(`/boards`, {
+        const response = await api.post(`/boards/`, {
             title: nombre,
             description: descripcion,
             color: color,
@@ -51,7 +51,7 @@ export const fetchTablerobyID = async (id) => {
 
 export const fetchColumnas = async (boardId) => {
     try {
-        const response = await api.get(`/boards/${boardId}/lists`);
+        const response = await api.get(`/boards/${boardId}/lists/`);
         return response.data;
     } catch (error) {
         console.error("Error al obtener las columnas:", error);
@@ -61,7 +61,7 @@ export const fetchColumnas = async (boardId) => {
 
 export const crearColumna = async (boardId, titulo) => {
     try {
-        const response = await api.post(`/boards/${boardId}/lists`, {
+        const response = await api.post(`/boards/${boardId}/lists/`, {
             title: titulo,
             board_id: boardId,
         });
@@ -92,7 +92,7 @@ export const crearTarjeta = async (boardId, columnaId, tituloTarjeta) => {
 
 export const actualizarColumna = async (boardId, columnaId, tarjetas) => {
     try {
-        await api.put(`/boards/${boardId}/lists/${columnaId}/cards`, {
+        await api.put(`/boards/${boardId}/lists/${columnaId}/cards/`, {
             cards: tarjetas.map((tarjeta) => tarjeta.id),
         });
     } catch (error) {
@@ -139,7 +139,7 @@ export const eliminarTarjeta = async (boardId, columnaId, cardId) => {
 export const editarColumna = async (boardId, columnaId, nuevoTitulo) => {
     try {
         const response = await api.put(
-            `/boards/${boardId}/lists/${columnaId}`,
+            `/boards/${boardId}/lists/${columnaId}/`,
             { title: nuevoTitulo, board_id: boardId }
         );
         return response.data;
@@ -151,7 +151,7 @@ export const editarColumna = async (boardId, columnaId, nuevoTitulo) => {
 
 export const eliminarColumna = async (boardId, columnaId) => {
     try {
-        await api.delete(`/boards/${boardId}/lists/${columnaId}`);
+        await api.delete(`/boards/${boardId}/lists/${columnaId}/`);
     } catch (error) {
         console.error("Error al eliminar la columna:", error);
         throw error;
