@@ -1,0 +1,32 @@
+services:
+  # Frontend - Vite React App
+  frontend:
+    container_name: trello-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - trello-network
+
+  # Backend - FastAPI Python
+  backend:
+    container_name: trello-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/trello.db:/app/trello.db
+    environment:
+      - DATABASE_URL=sqlite:///./trello.db
+    networks:
+      - trello-network
+
+networks:
+  trello-network:
+    driver: bridge
