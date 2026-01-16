@@ -5,8 +5,8 @@ from app.domain.entities.list import List
 
 
 class ListService:
-    def __init__(self, db: Session):
-        self.list_repo = ListRepository(db)
+    def __init__(self,list_repo: ListRepository):
+        self.list_repo = list_repo
 
     def get_lists_by_board(self, board_id: int) -> ListType[List]:
         return self.list_repo.get_by_board(board_id)
