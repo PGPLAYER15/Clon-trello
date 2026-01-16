@@ -1,13 +1,11 @@
 from typing import List
-from sqlalchemy.orm import Session
 from app.infrastructure.repositories.board_repository import BoardRepository
 from app.domain.entities.board import Board
 from app.domain.schemas.board import BoardCreate
 
-
 class BoardService:
-    def __init__(self, db: Session):
-        self.board_repo = BoardRepository(db)
+    def __init__(self, board_repo: BoardRepository):
+        self.board_repo = board_repo
 
     def get_user_boards(self, user_id: int) -> List[Board]:
         return self.board_repo.get_by_user(user_id)
