@@ -1,7 +1,8 @@
+from sys import prefix
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.infrastructure.database import engine, Base, SessionLocal
-from app.api.v1 import auth, boards, lists, cards
+from app.api.v1 import auth, boards, lists, cards , tag
 from app.domain.entities.board import Board
 from app.domain.entities.list import List
 from app.domain.entities.card import Card
@@ -76,6 +77,11 @@ app.include_router(
     cards.router, 
     prefix="/api/boards/{board_id}/lists/{list_id}/cards",
     tags=["cards"]
+)
+
+app.include_router(
+    tag.router,
+    prefix="/api/tags"
 )
 
 @app.get("/")
