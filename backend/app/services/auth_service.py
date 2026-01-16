@@ -7,9 +7,9 @@ from app.domain.entities.user import User
 
 
 class AuthService:
-    def __init__(self, db: Session):
-        self.user_repo = UserRepository(db)
-
+    def __init__(self, user_repo: UserRepository):
+        self.user_repo = user_repo
+    
     def register(self, email: str, username: str, password: str) -> User:
         hashed_password = get_password_hash(password)
         return self.user_repo.create_user(email, username, hashed_password)
