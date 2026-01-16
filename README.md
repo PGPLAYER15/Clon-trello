@@ -1,194 +1,219 @@
-# 📝 Clon de Trello
 
-**Clon Trello** es una aplicación tipo *To-Do* que permite a los usuarios enlistar, organizar y mover tareas entre diferentes columnas, al estilo del conocido gestor Trello.
+# 🚀 TaskFlow (Trello Clone)
 
-## 🚀 Funcionalidades principales
+<div align="center">
+  <img src="https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white" />
+  <img src="https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi" />
+  <img src="https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react" />
+  <img src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white" />
+  <img src="https://img.shields.io/badge/Docker-Enabled-2496ED?style=for-the-badge&logo=docker&logoColor=white" />
+</div>
 
-### ✨ Gestión de Tableros
-- Crear, editar y eliminar tableros personalizados
-- Cada usuario solo ve sus propios tableros (autenticación)
-- Personalizar tableros con colores
+<br />
 
-### 📋 Gestión de Columnas
-- Crear columnas para organizar tareas
-- Edición de título inline (clic para editar)
-- Menú de opciones con eliminación y confirmación
+<p align="center">
+  <strong>Un sistema de gestión de tareas estilo Kanban diseñado para la productividad y colaboración visual.</strong>
+</p>
 
-### 🎴 Gestión de Tarjetas
-- Crear tarjetas con título y descripción
-- Editar tarjetas a través de un modal interactivo
-- Eliminar tarjetas con confirmación
-- Soporte para descripciones con Markdown
+<p align="center">
+  <a href="#-demo">Ver Demo</a> •
+  <a href="#-arquitectura">Arquitectura</a> •
+  <a href="#-instalación-y-ejecución">Instalación</a> •
+  <a href="#-documentación-api">API Docs</a>
+</p>
 
-### 🖱️ Drag and Drop Avanzado
-- Arrastrar y soltar tarjetas entre columnas con **dnd-kit**
-- Preview visual mejorada al arrastrar (rotación y sombra)
-- Drag handle dedicado para evitar conflictos con clics
+---
 
-### 🔐 Sistema de Autenticación
-- Registro de usuarios con email y contraseña
-- Login con JWT (JSON Web Tokens)
-- Rutas protegidas para usuarios autenticados
-- Sesiones persistentes con tokens
+## 🎯 Sobre el Proyecto
 
-## 🛠️ Tecnologías utilizadas
+Este proyecto no es solo un "To-Do List". Es una implementación completa de un sistema **Kanban interactivo** que resuelve problemas de gestión de estado complejo en el frontend y relaciones de datos jerárquicas en el backend.
 
-### Backend
-- 🐍 **Python 3.9+**
-- ⚡ **FastAPI** - Framework web moderno
-- 🔒 **JWT** - Autenticación con tokens
-- 🗄️ **SQLAlchemy** - ORM para base de datos
-- 📦 **Pydantic** - Validación de datos
-- 🔑 **bcrypt** - Hashing de contraseñas
+El objetivo principal fue construir una aplicación **Full Stack** robusta, aplicando principios de **Clean Architecture** y patrones de diseño modernos.
 
-### Frontend
-- ⚛️ **React 18** - UI interactiva
-- 📦 **dnd-kit** - Drag and drop
-- 🎨 **CSS Modules** - Estilos aislados
-- 🔄 **Axios** - Cliente HTTP
-- �️ **React Router** - Navegación SPA
+### ✨ Funcionalidades Clave
 
-## 🔧 Instalación y ejecución
+- **🔄 Drag & Drop Avanzado:** Implementado con `dnd-kit` para una experiencia fluida sin re-renders innecesarios.
+- **🔐 Seguridad Robusta:** Autenticación vía **JWT (JSON Web Tokens)** con hashing de contraseñas (`bcrypt`) y protección de rutas middleware.
+- **⚡ API de Alto Rendimiento:** Backend construido con **FastAPI** para respuestas asíncronas y validación automática de datos con Pydantic.
+- **📱 UI Reactiva:** Frontend en **React 18** con gestión de estado global y optimistic updates para una sensación de inmediatez.
 
-### Requisitos
+---
 
-- Node.js 18+
-- Python 3.9+
-- pip
+## 🏗️ Arquitectura
 
-### Backend (FastAPI)
+El sistema sigue una arquitectura cliente-servidor desacoplada (REST API):
+
+```mermaid
+graph TD
+    User(( Usuario)) -->|"Interactúa"| Frontend[" **Frontend React**"]
+    
+    Frontend -->|"HTTP Request JSON"| API[" **API Layer**<br/>(Rutas & Controladores)"]
+    
+    subgraph "Backend"
+        direction TB
+        API -->|"Delegates Logic"| Service[" **Service Layer**<br/>(Casos de Uso)"]
+        Service -->|"Uses"| Repo[" **Infrastructure Layer**<br/>(Repositorios)"]
+        Repo -->|"Queries"| DB[(" **Database**")]
+        
+        Domain[" **Domain Layer**<br/>(Entidades & Schemas)"]
+        
+        Repo -.->|"Retorna Entities"| Domain
+        Service -.->|"Aplica Reglas"| Domain
+        API -.->|"Usa DTOs"| Domain
+    end
+
+    %% Styles
+    classDef frontend fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000000;
+    classDef api fill:#ffebee,stroke:#b71c1c,stroke-width:2px,color:#000000;
+    classDef service fill:#fffde7,stroke:#fbc02d,stroke-width:2px,color:#000000;
+    classDef infra fill:#e3f2fd,stroke:#0277bd,stroke-width:2px,color:#000000;
+    classDef domain fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000000;
+    classDef db fill:#eceff1,stroke:#455a64,stroke-width:2px,color:#000000;
+    
+    class Frontend frontend;
+    class API api;
+    class Service service;
+    class Repo infra;
+    class Domain domain;
+    class DB db;
+```
+
+### Decisiones Técnicas
+
+| Tecnología | Rol | ¿Por qué esta elección? |
+| --- | --- | --- |
+| **FastAPI** | Backend | Por su soporte nativo de asincronía (async/await) y su velocidad superior a Flask/Django en I/O bound tasks. |
+| **SQLAlchemy** | ORM | Permite abstraer las consultas SQL y facilita la migración futura a PostgreSQL sin cambiar lógica de negocio. |
+| **dnd-kit** | Drag & Drop | A diferencia de `react-beautiful-dnd`, es modular, ligero y soporta mejor los eventos táctiles y de accesibilidad. |
+| **JWT** | Auth | Stateless authentication. Ideal para escalabilidad horizontal ya que no requiere guardar sesiones en servidor. |
+
+---
+
+## 🖼️ Demo
+
+<div align="center">
+<table>
+<tr>
+<td align="center"><strong>Login Seguro</strong></td>
+<td align="center"><strong>Tablero Interactivo</strong></td>
+</tr>
+<tr>
+<td><img src="img/Login.png" alt="Login" width="400"/></td>
+<td><img src="img/Tableros.png" alt="Tablero" width="400"/></td>
+</tr>
+</table>
+<p><em>Gestión de tarjetas con Drag and Drop fluido</em></p>
+<img src="img/Cards.png" alt="Cards Demo" width="800"/>
+</div>
+
+---
+
+## 🔧 Instalación y Ejecución
+
+### Prerrequisitos
+
+* Node.js 18+
+* Python 3.9+
+* Git
+
+### 1. Clonar el repositorio
+
+```bash
+git clone [https://github.com/PGPLAYER15/clon-trello.git](https://github.com/PGPLAYER15/clon-trello.git)
+cd clon-trello
+
+```
+
+### 2. Configurar Backend (FastAPI)
 
 ```bash
 cd backend
 python -m venv venv
-source venv/bin/activate  # En Windows: venv\Scripts\activate
+
+# Windows
+venv\Scripts\activate
+# Mac/Linux
+source venv/bin/activate
+
 pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8002
+
+# Iniciar servidor
+uvicorn app.main:app --reload --port 8003
+
 ```
 
-### Frontend (React)
+### 3. Configurar Frontend (React)
 
 ```bash
 cd frontend
 npm install
 npm run dev
+
 ```
 
-La aplicación estará disponible en:
-- **Frontend:** http://localhost:5173
-- **Backend API:** http://localhost:8002
-- **Documentación API:** http://localhost:8002/docs
+🚀 **Acceso:**
 
-## 🖼️ Demo
+* App: `http://localhost:5173`
+* Swagger Docs: `http://localhost:8003/docs`
 
-<div align="center">
-  <img src="img/Login.png" alt="Vista de tableros" width="600"/>
-</div>
-<br/>
-<div align="center">
-  <img src="img/Tableros.png" alt="Tablero con columnas" width="600"/>
-</div>
-<br/>
-<div align="center">
-  <img src="img/Cards.png" alt="Cards" width="600"/>
-</div>
+---
 
-## 📂 Estructura del proyecto
+## 📂 Estructura del Proyecto
+
+La estructura sigue el patrón de **Separation of Concerns**:
 
 ```
 ├── backend/
 │   ├── app/
-│   │   ├── core/         # Configuración y seguridad
-│   │   │   ├── config.py # Variables de entorno
-│   │   │   └── security.py # JWT y autenticación
-│   │   ├── models/       # Modelos SQLAlchemy
-│   │   │   ├── board.py
-│   │   │   ├── card.py
-│   │   │   ├── list.py
-│   │   │   └── user.py
-│   │   ├── routes/       # Rutas de la API
-│   │   │   ├── auth.py   # Login y registro
-│   │   │   ├── boards.py
-│   │   │   ├── cards.py
-│   │   │   └── lists.py
-│   │   ├── schemas/      # Esquemas Pydantic
-│   │   └── main.py       # Punto de entrada
-│   ├── .env              # Variables de entorno
-│   └── trello.db         # Base de datos SQLite
+│   │   ├── domain/           #  Capa de Dominio (Entities & Schemas)
+│   │   ├── infrastructure/   #  Capa de Infraestructura (Repositories & DB)
+│   │   ├── services/         #  Capa de Aplicación (Business Logic)
+│   │   ├── api/              #  Capa de Presentación (Rutas/Endpoints)
+│   │   └── core/             #  Configuración (Auth, Env, DI)
+│   └── trello.db
 │
 ├── frontend/
 │   ├── src/
-│   │   ├── components/   # Componentes React
-│   │   │   ├── Card/
-│   │   │   ├── Columna/
-│   │   │   ├── Tablero/
-│   │   │   └── modal/
-│   │   ├── context/      # AuthContext (estado global)
-│   │   ├── hooks/        # Custom hooks
-│   │   ├── pages/        # Páginas (home, login, register)
-│   │   ├── services/     # Conexiones con la API
-│   │   └── App.jsx       # Componente principal
-│   └── vite.config.js
-│
-├── CHANGELOG.md          # Historial de cambios
-└── README.md
+│   │   ├── components/   # UI Reutilizable
+│   │   ├── context/      # Estado Global (Auth)
+│   │   ├── hooks/        # Lógica encapsulada
+│   │   └── services/     # Capa de API (Axios)
+
 ```
-
-## 📡 Endpoints de la API
-
-### 🔐 Autenticación
-
-| Método | Endpoint             | Descripción                    |
-|--------|----------------------|--------------------------------|
-| POST   | `/api/auth/register` | Registrar nuevo usuario        |
-| POST   | `/api/auth/login`    | Iniciar sesión (obtener token) |
-| GET    | `/api/auth/me`       | Obtener usuario actual         |
-
-### 📁 Boards (requiere autenticación)
-
-| Método | Endpoint                 | Descripción                    |
-|--------|--------------------------|--------------------------------|
-| GET    | `/api/boards/`           | Obtener tableros del usuario   |
-| POST   | `/api/boards/`           | Crear un nuevo tablero         |
-| GET    | `/api/boards/{board_id}` | Obtener un tablero por ID      |
-| DELETE | `/api/boards/{board_id}` | Eliminar un tablero            |
-
-### 🗂️ Lists
-
-| Método | Endpoint                                        | Descripción                         |
-|--------|-------------------------------------------------|-------------------------------------|
-| POST   | `/api/boards/{board_id}/lists/`                 | Crear lista en un tablero           |
-| GET    | `/api/boards/{board_id}/lists/`                 | Obtener listas de un tablero        |
-| GET    | `/api/boards/{board_id}/lists/{list_id}`        | Obtener lista por ID                |
-| PUT    | `/api/boards/{board_id}/lists/{list_id}`        | Actualizar lista                    |
-| DELETE | `/api/boards/{board_id}/lists/{list_id}`        | Eliminar lista                      |
-| PUT    | `/api/boards/{board_id}/lists/{list_id}/cards`  | Actualizar las tarjetas de la lista |
-
-### 🗃️ Cards
-
-| Método | Endpoint                                                    | Descripción            |
-|--------|-------------------------------------------------------------|------------------------|
-| POST   | `/api/boards/{board_id}/lists/{list_id}/cards/create`       | Crear tarjeta          |
-| GET    | `/api/boards/{board_id}/lists/{list_id}/cards/`             | Obtener tarjetas       |
-| GET    | `/api/boards/{board_id}/lists/{list_id}/cards/{card_id}`    | Obtener tarjeta por ID |
-| PUT    | `/api/boards/{board_id}/lists/{list_id}/cards/{card_id}`    | Actualizar tarjeta     |
-| DELETE | `/api/boards/{board_id}/lists/{list_id}/cards/{card_id}`    | Eliminar tarjeta       |
-
-## 🔒 Configuración de Entorno
-
-Crea un archivo `.env` en la carpeta `backend/`:
-
-```env
-SECRET_KEY=tu-clave-secreta-muy-segura
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=1440
-DATABASE_URL=sqlite:///./trello.db
-```
-
-## 📄 Licencia
-
-Este proyecto es de código abierto y está disponible bajo la licencia MIT.
 
 ---
 
-Hecho con ❤️ por [PGPLAYER15](https://github.com/PGPLAYER15)
+## 📡 API Endpoints
+
+Documentación completa disponible en `/docs` (Swagger UI). Endpoints principales:
+
+### 🔐 Auth
+
+* `POST /api/auth/login` - Obtener Access Token
+* `POST /api/auth/register` - Crear cuenta
+
+### 📋 Gestión
+
+* `GET /api/boards/` - Listar tableros del usuario
+* `POST /api/lists/` - Crear columna
+* `PUT /api/cards/{id}` - Mover tarjeta (Drag & Drop update)
+
+---
+
+## 🚀 Retos y Aprendizajes
+
+Durante el desarrollo, los desafíos más interesantes fueron:
+
+1. **Sincronización de Estado (Frontend):** Mantener la UI actualizada instantáneamente al soltar una tarjeta (Optimistic UI) mientras se confirma la petición en el backend.
+2. **Relaciones en Cascada (Backend):** Diseñar los modelos de SQLAlchemy para asegurar que al borrar una Lista, se borren sus Tarjetas asociadas correctamente.
+
+
+---
+
+<p align="center">
+Hecho con 💻 y ☕ por <a href="https://github.com/PGPLAYER15">Marco Palazuelos</a>
+</p>
+
+
+-----
+
