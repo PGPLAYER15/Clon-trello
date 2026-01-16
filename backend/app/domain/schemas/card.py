@@ -12,6 +12,7 @@ class CardBase(BaseModel):
 class CardCreate(CardBase):
     list_id: int
     due_date: Optional[datetime] = None
+    tags: list[str] = []
 
 
 class CardUpdate(BaseModel):
@@ -25,6 +26,7 @@ class CardUpdate(BaseModel):
 class CardResponse(CardBase):
     id: int
     due_date: Optional[datetime] = None
+    tags: list[str]
 
     class Config:
         from_attributes = True

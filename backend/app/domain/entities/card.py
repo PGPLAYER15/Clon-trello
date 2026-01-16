@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, DateTime
 from sqlalchemy.orm import relationship
 from app.infrastructure.database import Base
+from app.domain.entities.tag import card_tag
 
 
 class Card(Base):
@@ -14,3 +15,4 @@ class Card(Base):
     due_date = Column(DateTime, nullable=True)
 
     list = relationship("List", back_populates="cards")
+    tags = relationship("Tag", secondary=card_tag, back_populates="cards")
