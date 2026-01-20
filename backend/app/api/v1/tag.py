@@ -32,3 +32,10 @@ def delete_tag(tag_id: int, tag_service: TagService = Depends(get_tag_service)):
     if not tag_service.delete_tag(tag_id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tag not found")
     return
+
+@router.post("/tags/{tag_id}/cards/{card_id}", status_code=status.HTTP_204_NO_CONTENT)
+def add_tag_to_card(tag_id: int, card_id: int, tag_service: TagService = Depends(get_tag_service)):
+    if not tag_service.add_tag_to_card(tag_id, card_id):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tag not found")
+    return
+    

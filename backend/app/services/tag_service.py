@@ -21,3 +21,6 @@ class TagService:
     
     def delete_tag(self, tag_id: int) -> bool:
         return self.tag_repo.delete_tag(tag_id)
+    
+    def add_tag_to_card(self, tag_id: int, card_id: int) -> bool:
+        return self.tag_repo.add_tag_to_card(tag_id, card_id)

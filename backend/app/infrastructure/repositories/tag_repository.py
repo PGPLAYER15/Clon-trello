@@ -43,3 +43,11 @@ class TagRepository(BaseRepository[Tag], ITagRepository):
             self.db.commit()
             return True
         return False
+    
+    def add_tag_to_card(self, tag_id: int, card_id: int) -> bool:
+        tag = self.get_by_id(tag_id)
+        if tag:
+            tag.cards.append(card_id)
+            self.db.commit()
+            return True
+        return False

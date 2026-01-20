@@ -27,3 +27,8 @@ class ITagRepository(ABC):
     @abstractmethod
     def delete_tag(self, tag_id: int) -> bool:
         pass
+    
+    @abstractmethod
+    def add_tag_to_card(self, tag_id: int, card_id: int) -> bool:
+        pass
+        

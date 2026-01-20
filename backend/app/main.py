@@ -81,7 +81,8 @@ app.include_router(
 
 app.include_router(
     tag.router,
-    prefix="/api/tags"
+    prefix="/api/tags",
+    tags=["tags"]
 )
 
 @app.get("/")

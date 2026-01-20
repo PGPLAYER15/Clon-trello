@@ -1,7 +1,8 @@
-from typing import List as ListType
+from typing import List as ListType, Optional
+from datetime import datetime
 from app.infrastructure.repositories.card_repository import CardRepository
 from app.domain.entities.card import Card
-from app.domain.schemas.card import CardUpdate
+from app.domain.schemas.card import CardUpdate, CardCreate
 from app.domain.Interfaces.tag_repository import ITagRepository
 
 class CardService:
@@ -16,7 +17,8 @@ class CardService:
         return self.card_repo.get_by_id(card_id)
 
     def create_card(self, title: str, list_id: int, description: str = None) -> Card:
-        return self.card_repo.create_card(title, list_id, description)
+        card_data = CardCreate(title=title, list_id=list_id, description=description)
+        return self.card_repo.create_card(card_data)
 
     def update_card(self, card_id: int, card_data: CardUpdate) -> Card | None:
         return self.card_repo.update_card(card_id, card_data)
@@ -35,3 +37,5 @@ class CardService:
 
         if not card:
             return False
+    def search_cards(self, q: Optional[str], tags_ids: list[int], due_before: Optional[datetime], due_after: Optional[datetime]) -> ListType[Card]:
+        return self.card_repo.search_cards(q, tags_ids, due_before, due_after)

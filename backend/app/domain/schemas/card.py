@@ -12,7 +12,7 @@ class CardBase(BaseModel):
 class CardCreate(CardBase):
     list_id: int
     due_date: Optional[datetime] = None
-    tags: list[str] = []
+    tags: Optional[list[str]] = []
 
 
 class CardUpdate(BaseModel):
@@ -26,7 +26,13 @@ class CardUpdate(BaseModel):
 class CardResponse(CardBase):
     id: int
     due_date: Optional[datetime] = None
-    tags: list[str]
+    tags: Optional[list[str]] = []
 
     class Config:
         from_attributes = True
+
+class CardSearchParams(BaseModel):
+    q: Optional[str] = None
+    tag_id: Optional[list[int]] = None
+    due_before: Optional[datetime] = None
+    due_after: Optional[datetime] = None
